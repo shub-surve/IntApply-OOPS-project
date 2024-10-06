@@ -206,6 +206,34 @@ class Company:
                 print("Company data loaded successfully!")
         except FileNotFoundError:
             print("No existing company data found.")
-        except json.JSONDecodeError:
-            print("Error decoding company data.")
+        
+        
+class CompanyLog:
+    company_log = {}
+
+    def __init__(self , email , password):
+        self.email = email
+        self.__password = password
+
+        CompanyLog.company_log[email] = self.__password
+
+    @staticmethod
+    def componyAuth(email , password):
+        return CompanyLog.company_log.get(email) == password
+    @staticmethod
+    def save_company_log(filename = 'company_log.json'):
+        company_log_data = []
+        for email , password in CompanyLog.company_log.items():
+            company_log_data.append({
+                'email': email ,
+                'password': password
+            })
+        with open(filename ,  'w') as file:
+            json.dump(company_log_data , file)
+
+
+    
+    
+
+        
 
