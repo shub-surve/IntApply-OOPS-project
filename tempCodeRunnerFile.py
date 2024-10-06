@@ -3,14 +3,12 @@ from user import *
 from company import *
 
 def main():
-    print("Welcome to the INTAPPLY!!")
+    print("Welcome to the User Profile System!")
     
    
     UserProfile.load_profiles_from_file()
     UserLog.load_log_from_file()
     Company.load_company_data()
-    CompanyLog.load_log_from_file()
-    # print(Company.company_details)
     
     while True:
         choice = input("Do you want to \n(1) Register as user  \n(2) Login as user? \n(3)Register as Company \n(4)Login as company \n(0)Enter 0 to exit: \nOption:- ")
@@ -30,21 +28,14 @@ def main():
             registerCompany()
         
         elif choice == '4':
-              
+               loginCompany()
                if loginCompany():
                     email = input("Enter your email to proceed: ")
                     company = find_company_by_email(email)
                     if company:
-                       manageCompanyProfile(company)
+                       manageCompanyProfile()
                     else:
                         print("Company not Found")    
         
         elif choice == '0':
-            print("Exiting the system. Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please select again.")
-
-
-if __name__ == "__main__":
-    main()
+            print("Exiting the system. Goodbye!"

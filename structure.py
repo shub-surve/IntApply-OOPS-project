@@ -12,7 +12,7 @@ class UserProfile:
         self.email = email
         self.location = location
         self.education = [] 
-        self.resumes = []  # List to store resumes
+        self.resumes = [] 
         self.applications = []  
         self.notifications = [] 
         UserProfile.user_profiles.append(self)  
@@ -148,7 +148,7 @@ class UserLog:
             print("No existing user log found.")
 
 
-import json
+
 
 class Company:
     company_details = []  
@@ -163,6 +163,8 @@ class Company:
         self.location = location
         self.email = email
         self.description = description
+        self.internship = []
+        
         Company.company_details.append(self)
 
     @staticmethod
@@ -176,7 +178,8 @@ class Company:
                 'website': company.website,
                 'location': company.location,
                 'email': company.email,
-                'description': company.description
+                'description': company.description,
+                'internship': company.internship
             })
         
      
@@ -197,18 +200,57 @@ class Company:
                         website=data["website"],
                         location=data["location"],
                         email=data["email"],
-                        description=data["description"]
+                        description=data["description"],
                     )
                     company.companyId = data["companyId"]  
+                    company.internship = data["internship"]
                     if data["companyId"] >= Company.companyId:
                         Company.companyId = data["companyId"] + 1
-                
+
                 print("Company data loaded successfully!")
         except FileNotFoundError:
             print("No existing company data found.")
+
+    def updateCompanydetails(self):
+        newName =  input(f"Enter new company name {self.name}: ") or self.name
+        newIndustry = input(f"Enter new industry {self.industry}: ") or self.industry
+
+        newWebsite = input(f"Enter new website: {self.website} ") or self.website
+
+        newLocation = input(f"Enter new location:  {self.location} ") or self.location
+
+        newEmail = input(f"Enter new email: {self.email} ") or self.email
+
+        newDescription = input("Enter new description: ") or self.description
+
+        self.name = newName
+        self.industry = newIndustry
+        self.website = newWebsite
+        self.location = newLocation
+        self.email = newEmail
+        self.description = newDescription
+
+
+    def createInternship( self , title , company_name , duration , salary , requirements,  description , location):
+        internId = 1
+        enter_internship = {
+            "internId" : internId ,
+            'title' : title , 
+            'company_name' :  company_name ,
+            'duration' : duration ,
+            'salary' : salary ,
+            'requirements' : requirements ,
+            'description' : description ,
+            'location' : location
+        }
+        internId += 1
+        self.internship.append(enter_internship)
+        
+
         
         
 class CompanyLog:
+   
     company_log = {}
 
     def __init__(self , email , password):
@@ -218,8 +260,10 @@ class CompanyLog:
         CompanyLog.company_log[email] = self.__password
 
     @staticmethod
-    def componyAuth(email , password):
+    def companyAuth(email , password):
         return CompanyLog.company_log.get(email) == password
+    
+
     @staticmethod
     def save_company_log(filename = 'company_log.json'):
         company_log_data = []
@@ -231,6 +275,13 @@ class CompanyLog:
         with open(filename ,  'w') as file:
             json.dump(company_log_data , file)
 
+    def load_log_from_file(filename = 'company_log.json'):
+        try:
+            with open(filename , 'r') as file:
+                CompanyLog.company_log = json.load(file)
+                print("User Log loaded Successfully!")
+        except FileNotFoundError:
+            print("No user log file found!")
 
     
     

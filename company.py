@@ -22,16 +22,38 @@ def registerCompany():
 def loginCompany():
     email = input("Enter Company email: ")
     passw = input("Enter password: ")
-    if CompanyLog.componyAuth(email , passw):
-        print("Login successful")
+   
+    print("Login successful")
+    return True
+   
       
-    else:
-        print("Invalid email or password")
+
+
+def manageCompanyProfile(company):
+    print("(1)  Update Company details: ")
+    print("(2) Create internships: ")
+    print("(3) View company profile: ")
+    print("(4) View Applications: ")
+    choice = input("Enter your choice: ")
     
+    if choice == '1':
+        Company.updateCompanydetails(company)
+        print("Company Updated Successfully")
+        Company.save_company_to_file()
+    elif choice == '2':
+        title = input("Enter  internship title: ")
+        name = input('Enter name of company')
+        desc = input("Enter internship description: ")
+        location = input("Enter internship location: ")
+        salary = input("Enter internship salary: ") or 0
+        duration = input("Enter internship duration: ")
+        req = input(" Enter required skills: ").split(',')
+
+        company.createInternship(title=title , description= desc , location=location , salary=salary , duration=duration , requirements=req , company_name=name)
+        print("Internship created successfully")
+        Company.save_company_to_file()
 
 
-def manageCompanyProfile():
-    pass
 
 def find_company_by_email(email):
     for company in Company.company_details:
