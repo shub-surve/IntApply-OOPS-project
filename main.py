@@ -4,12 +4,18 @@ from company import *
 
 def main():
     print("Welcome to the INTAPPLY!!")
-    
+   
    
     UserProfile.load_profiles_from_file()
     UserLog.load_log_from_file()
     Company.load_company_data()
     CompanyLog.load_log_from_file()
+    for company in Company.company_details:
+       print(company.email) 
+                     
+  
+   
+
     # print(Company.company_details)
     
     while True:
@@ -30,14 +36,14 @@ def main():
             registerCompany()
         
         elif choice == '4':
-              
                if loginCompany():
                     email = input("Enter your email to proceed: ")
-                    company = find_company_by_email(email)
-                    if company:
-                       manageCompanyProfile(company)
-                    else:
-                        print("Company not Found")    
+                    for company in Company.company_details:
+                        if company.email == email:
+                            manageCompanyProfile(company)
+                        else:
+                            print("Company not found.")
+                     
         
         elif choice == '0':
             print("Exiting the system. Goodbye!")

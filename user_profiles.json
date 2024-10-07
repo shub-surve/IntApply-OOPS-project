@@ -1,0 +1,13 @@
+[
+    {
+        "user_id": 1,
+        "first_name": "Shubham",
+        "last_name": "Surve",
+        "email": "shub@gmail.com",
+        "location": "Mumbai",
+        "education": [],
+        "resumes": [],
+        "applications": [],
+        "notifications": []
+    }
+]

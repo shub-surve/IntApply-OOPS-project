@@ -43,6 +43,8 @@ class UserProfile:
         }
         self.applications.append(application)
         self.add_notification(f"Applied to {internship.title}")
+   
+
 
     def add_notification(self, message):
         self.notifications.append(message)
@@ -164,7 +166,6 @@ class Company:
         self.email = email
         self.description = description
         self.internship = []
-        
         Company.company_details.append(self)
 
     @staticmethod
@@ -245,6 +246,10 @@ class Company:
         }
         internId += 1
         self.internship.append(enter_internship)
+    
+    def view_all_internships(self):
+        for internship in self.internship:
+            return internship
         
 
         

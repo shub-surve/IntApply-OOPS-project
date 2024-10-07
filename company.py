@@ -52,12 +52,8 @@ def manageCompanyProfile(company):
         company.createInternship(title=title , description= desc , location=location , salary=salary , duration=duration , requirements=req , company_name=name)
         print("Internship created successfully")
         Company.save_company_to_file()
-
-
-
 def find_company_by_email(email):
     for company in Company.company_details:
         if company.email == email:
             return company
-        
-        return None
+    return None
