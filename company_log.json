@@ -1,4 +1,4 @@
-[
-{"email": "hr@techinnovators.com", "password": "1234"} ,
-{"email":  "contact@greenenergysolutions.com", "password": "0987"}
-]
+{
+    "hr@techinnovators.com" : "1234" , 
+    "contact@greenenergysolutions.com" : "0987"
+}

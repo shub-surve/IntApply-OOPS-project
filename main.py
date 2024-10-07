@@ -10,8 +10,8 @@ def main():
     UserLog.load_log_from_file()
     Company.load_company_data()
     CompanyLog.load_log_from_file()
-    for company in Company.company_details:
-       print(company.email) 
+    for user in UserProfile.user_profiles:
+        print(user.email)
                      
   
    
@@ -25,13 +25,15 @@ def main():
             registerUser()
         elif choice == '2':
             if login():
-                
-                email = input("Enter your email to proceed: ")
-                user = find_user_by_email(email)
-                if user:
-                    manage_user_profile(user)
-                else:
-                    print("User not found.")
+                email = input("Enter your email to proceed: ").lower()
+
+                for user in UserProfile.user_profiles:
+                    if user.email == email:
+                        manage_user_profile(user)
+                        print("Welcome back!!")
+                    else:
+                        print("Invalid email")
+
         elif choice == '3':
             registerCompany()
         

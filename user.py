@@ -4,7 +4,7 @@ from structure import *
 def registerUser():
     firstname = input("Enter first name: ")
     lastname = input("Enter last name: ")
-    email = input("Enter email: ")
+    email = input("Enter email: ").lower()
     location = input("Enter location: ")
     password = input("Enter password: ")
     confirm_password = input("Confirm password: ")
@@ -45,7 +45,7 @@ def find_user_by_email(email):
 
 def manage_user_profile(user):
     while True:
-        action = input("What would you like to do? (1) Add Education (2) Add Resume (3) Update Profile (4) Logout")
+        action = input("What would you like to do? (1) Add Education (2) Add Resume (3) Update Profile (4) View Internships: ")
         
         if action == '1':
             addEducation(user)
@@ -55,6 +55,8 @@ def manage_user_profile(user):
             UserProfile.updateProfile(user)
             UserProfile.save_profiles_to_file()
             UserLog.save_log_to_file()
+        elif action == '4':
+            fetch_internships()
         elif action == '4' :
             UserProfile.save_profiles_to_file()
             break
@@ -78,3 +80,42 @@ def addResume(user):
 
     user.add_resume(name=name, job_title=job_title, description=description, skills=skills)
     print("Resume added successfully!")
+
+def fetch_internships():
+    try:
+    
+        with open("company_details.json", 'r') as file:
+            companies = json.load(file)
+        
+        internships = []
+        
+       
+        for company in companies:
+            company_name = company.get('name')
+            company_internships = company.get('internship', [])
+            
+            # Add internships to the list with company name and internship details
+            for internship in company_internships:
+                internship['name'] = company_name 
+                internships.append(internship)
+
+
+            for internship in internships:
+                print(f"Company id :  {internship['internship_id']}")
+                print(f"Company: {internship['name']}")
+                print(f"Internship Title: {internship['title']}")
+                print(f"Description: {internship['description']}")
+                print(f"Location: {internship['location']}")
+                print(f"Duration: {internship['duration']}")
+                print(f"Stipend: {internship['stipend']}\n")
+
+    except FileNotFoundError:
+        print(f"File not found!")
+        return []
+    except json.JSONDecodeError:
+        print("Error decoding JSON!")
+        return []
+    
+   
+
+            
