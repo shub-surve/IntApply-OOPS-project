@@ -1,6 +1,5 @@
 from structure import *
 
-
 def registerUser():
     firstname = input("Enter first name: ")
     lastname = input("Enter last name: ")
@@ -10,11 +9,10 @@ def registerUser():
     confirm_password = input("Confirm password: ")
 
     if password == confirm_password:
-
         user = UserProfile(firstname, lastname, email, location)
         UserLog(email, password)
-        UserProfile.save_profiles_to_file()  
-        UserLog.save_log_to_file() 
+        UserProfile.save_profiles_to_file()  # Save user profiles
+        UserLog.save_log_to_file()  # Save user login credentials
         print("User registered successfully! You can now log in.")
     else:
         print("Passwords do not match. Try again.")
@@ -37,7 +35,6 @@ def login():
                 return False  
 
 def find_user_by_email(email):
-    
     for user in UserProfile.user_profiles:
         if user.email == email:
             return user
@@ -45,7 +42,7 @@ def find_user_by_email(email):
 
 def manage_user_profile(user):
     while True:
-        action = input("What would you like to do? (1) Add Education (2) Add Resume (3) Update Profile (4) View Internships: ")
+        action = input("What would you like to do? \n(1) Add Education \n(2) Add Resume \n(3) Update Profile \n(4) View available Internships \n(5) Apply for internship \n(6) View Notifications \n(7) Exit: ")
         
         if action == '1':
             addEducation(user)
@@ -53,12 +50,16 @@ def manage_user_profile(user):
             addResume(user)
         elif action == '3':
             UserProfile.updateProfile(user)
-            UserProfile.save_profiles_to_file()
-            UserLog.save_log_to_file()
+            UserProfile.save_profiles_to_file()  # Save profile after update
+            UserLog.save_log_to_file()  # Save logs after update
         elif action == '4':
             fetch_internships()
-        elif action == '4' :
-            UserProfile.save_profiles_to_file()
+        elif action == '5':
+            internship_id = int(input("Enter the ID of the internship you want to apply for: "))
+            apply_for_internships(user, internship_id)
+        elif action == '6':
+            user.view_notifications()
+        elif action == '7':
             break
         else:
             print("Invalid choice. Please select again.")
@@ -81,41 +82,73 @@ def addResume(user):
     user.add_resume(name=name, job_title=job_title, description=description, skills=skills)
     print("Resume added successfully!")
 
-def fetch_internships():
+def fetch_internships(filename="company_details.json"):
     try:
-    
-        with open("company_details.json", 'r') as file:
+        with open(filename, 'r') as file:
             companies = json.load(file)
         
         internships = []
         
-       
         for company in companies:
             company_name = company.get('name')
             company_internships = company.get('internship', [])
             
-            # Add internships to the list with company name and internship details
             for internship in company_internships:
-                internship['name'] = company_name 
+                internship['company_name'] = company_name 
                 internships.append(internship)
 
-
-            for internship in internships:
-                print(f"Company id :  {internship['internship_id']}")
-                print(f"Company: {internship['name']}")
-                print(f"Internship Title: {internship['title']}")
-                print(f"Description: {internship['description']}")
-                print(f"Location: {internship['location']}")
-                print(f"Duration: {internship['duration']}")
-                print(f"Stipend: {internship['stipend']}\n")
+        for internship in internships:
+            print(f"Internship ID: {internship['internship_id']}")
+            print(f"Company: {internship['company_name']}")
+            print(f"Title: {internship['title']}")
+            print(f"Description: {internship['description']}")
+            print(f"Location: {internship['location']}")
+            print(f"Duration: {internship['duration']}")
+            print(f"Stipend: {internship['stipend']}\n")
+        
+        return internships
 
     except FileNotFoundError:
-        print(f"File not found!")
+        print("File not found!")
         return []
     except json.JSONDecodeError:
         print("Error decoding JSON!")
         return []
-    
-   
 
-            
+def apply_for_internships(user, internship_id, filename="company_details.json"):
+    """
+    Apply for internships for the user!
+    """
+    internships = fetch_internships(filename)
+
+    # Find the selected internship based on internship_id
+    selected_internship = next(
+        (internship for internship in internships if internship['internship_id'] == internship_id), 
+        None
+    )
+
+    if selected_internship:
+        # Check if the user has already applied for the internship
+        for application in user.applications:
+            if application["internship_id"] == internship_id:
+                print("You have already applied for this internship!")
+                return
+
+        # Create an application
+        application = {
+            "internship_id": selected_internship['internship_id'],
+            "title": selected_internship['title'],
+            "company_name": selected_internship['company_name'],
+            "status": "Pending"
+        }
+
+        # Append the application to the user's applications
+        user.applications.append(application)
+
+        # Notify the user about the application
+        user.add_notification(f"Successfully applied for {selected_internship['title']} at {selected_internship['company_name']}")
+        UserProfile.save_profiles_to_file()
+
+        print(f"Applied for {selected_internship['title']} at {selected_internship['company_name']} successfully!")
+    else:
+        print(f"No internship found with ID: {internship_id}")

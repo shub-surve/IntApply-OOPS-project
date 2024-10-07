@@ -14,7 +14,16 @@
             }
         ],
         "resumes": [],
-        "applications": [],
-        "notifications": []
+        "applications": [
+            {
+                "internship_id": 2,
+                "title": "Data Analyst Intern",
+                "company_name": "Tech Innovators Pvt Ltd",
+                "status": "Pending"
+            }
+        ],
+        "notifications": [
+            "Successfully applied for Data Analyst Intern at Tech Innovators Pvt Ltd"
+        ]
     }
 ]

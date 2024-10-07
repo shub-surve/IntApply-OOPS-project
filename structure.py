@@ -36,16 +36,6 @@ class UserProfile:
         self.resumes.append(resume)
         print("Resume added successfully!")
 
-    def apply_for_internship(self, internship):
-        application = {
-            'internship_id': internship.internship_id,
-            'status': 'Pending'
-        }
-        self.applications.append(application)
-        self.add_notification(f"Applied to {internship.title}")
-   
-
-
     def add_notification(self, message):
         self.notifications.append(message)
 

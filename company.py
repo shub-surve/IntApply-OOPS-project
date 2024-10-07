@@ -1,5 +1,5 @@
 from structure import *
-from verify_email import verify_email
+
 
 def registerCompany():
     name = input("Enter name of the company: ")
